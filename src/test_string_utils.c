@@ -4,7 +4,7 @@
 
 
 void test_string_new(void) {
-	string_words* words = string_words_new();
+	string_words_t* words = string_words_new();
 
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words);
 	CU_ASSERT_PTR_NULL(words->words);
@@ -13,7 +13,7 @@ void test_string_new(void) {
 
 
 void test_string_append(void) {
-	string_words* words = string_words_new();
+	string_words_t* words = string_words_new();
 
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words);
 
@@ -36,7 +36,7 @@ void test_string_split(void) {
 	char* teststr5 = ":";
 	char* teststr6 = "a";
 
-	string_words* words1 = string_split(teststr1, ":");
+	string_words_t* words1 = string_split(teststr1, ":");
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words1);
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words1->words);
 	CU_ASSERT_EQUAL(words1->count, 4);
@@ -46,7 +46,7 @@ void test_string_split(void) {
 	CU_ASSERT_STRING_EQUAL(words1->words[3], "d");
 	string_words_free(words1);
 
-	string_words* words2 = string_split(teststr2, ":");
+	string_words_t* words2 = string_split(teststr2, ":");
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words2);
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words2->words);
 	CU_ASSERT_EQUAL(words2->count, 4);
@@ -56,7 +56,7 @@ void test_string_split(void) {
 	CU_ASSERT_STRING_EQUAL(words2->words[3], "d");
 	string_words_free(words2);
 
-	string_words* words3 = string_split(teststr3, ":");
+	string_words_t* words3 = string_split(teststr3, ":");
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words3);
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words3->words);
 	CU_ASSERT_EQUAL(words3->count, 4);
@@ -66,7 +66,7 @@ void test_string_split(void) {
 	CU_ASSERT_STRING_EQUAL(words3->words[3], "");
 	string_words_free(words3);
 
-	string_words* words4 = string_split(teststr4, ":");
+	string_words_t* words4 = string_split(teststr4, ":");
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words4);
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words4->words);
 	CU_ASSERT_EQUAL(words4->count, 3);
@@ -75,7 +75,7 @@ void test_string_split(void) {
 	CU_ASSERT_STRING_EQUAL(words4->words[2], "");
 	string_words_free(words4);
 
-	string_words* words5 = string_split(teststr5, ":");
+	string_words_t* words5 = string_split(teststr5, ":");
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words5);
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words5->words);
 	CU_ASSERT_EQUAL(words5->count, 2);
@@ -83,7 +83,7 @@ void test_string_split(void) {
 	CU_ASSERT_STRING_EQUAL(words5->words[1], "");
 	string_words_free(words5);
 
-	string_words* words6 = string_split(teststr6, ":");
+	string_words_t* words6 = string_split(teststr6, ":");
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words6);
 	CU_ASSERT_PTR_NOT_NULL_FATAL(words6->words);
 	CU_ASSERT_EQUAL(words6->count, 1);

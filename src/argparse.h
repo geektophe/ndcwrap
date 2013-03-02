@@ -7,8 +7,8 @@
 #define ARGPARSE_PREFIX "DYN"
 #define ARGPARSE_DELIM ":"
 
-int   argparse_is_dynamic(const char*);
-arg*  argparse_parse_arg(const char*);
-char* argparse_get_thr(service_list*, const char*);
+int    argparse_is_dynamic(const char*);
+arg_t* argparse_parse_arg(const char*);
+char*  argparse_get_thr(service_list_t*, const char*);
 
 #endif

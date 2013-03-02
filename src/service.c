@@ -15,8 +15,8 @@
  * @return [AjBool] true if successful read
  * @@
  *****************************************************************************/
-service* service_new(void) {
-	service* new_service = (service*)malloc(sizeof(service));
+service_t* service_new(void) {
+	service_t* new_service = (service_t*)malloc(sizeof(service_t));
 
 	if (NULL == new_service) {
 		PERROR();
@@ -29,8 +29,8 @@ service* service_new(void) {
 }
 
 
-void service_set(service* target, const char* serv, const char* warn,
-                  const char* crit) {
+void service_set(service_t* target, const char* serv, const char* warn,
+                 const char* crit) {
 
 	if (NULL == target) {
 		ERROR("target is not initialized.", 1);
@@ -77,7 +77,7 @@ void service_set(service* target, const char* serv, const char* warn,
 }
 
 
-void service_free(service* target) {
+void service_free(service_t* target) {
 	if (NULL == target)
 		return;
 
@@ -106,8 +106,8 @@ void service_free(service* target) {
 }
 
 
-service_list* service_list_new(void) {
-	service_list* new_list = (service_list*)malloc(sizeof(service_list));
+service_list_t* service_list_new(void) {
+	service_list_t* new_list = (service_list_t*)malloc(sizeof(service_list_t));
 
 	if (NULL == new_list) {
 		PERROR();
@@ -119,14 +119,14 @@ service_list* service_list_new(void) {
 }
 
 
-void service_list_free(service_list* target) {
+void service_list_free(service_list_t* target) {
 
 	/* Recursively frees existing list members */
 	if (NULL != target->first) {
-		service* current = target->first;
+		service_t* current = target->first;
 
 		while (NULL != current) {
-			service* next = current->next;
+			service_t* next = current->next;
 			service_free(current);
 			current = next;
 		}
@@ -140,7 +140,7 @@ void service_list_free(service_list* target) {
 }
 
 
-void service_list_append(service_list* target, service* child) {
+void service_list_append(service_list_t* target, service_t* child) {
 	if (NULL == target->first) {
 		target->first = child;
 		target->last = child;
@@ -152,13 +152,13 @@ void service_list_append(service_list* target, service* child) {
 }
 
 
-service* service_list_lookup(service_list* source, const char* name) {
-	service* current = source->first;
+service_t* service_list_lookup(service_list_t* source, const char* serv) {
+	service_t* current = source->first;
 
 	while (NULL != current) {
-		char *srvname = current->serv;
+		char *cur_serv = current->serv;
 
-		if (NULL != srvname && 0 == strcmp(srvname, name)) {
+		if (NULL != cur_serv && 0 == strcmp(cur_serv, serv)) {
 			return current;
 		}
 		current = current->next;

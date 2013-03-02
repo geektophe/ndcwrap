@@ -27,7 +27,7 @@ void test_conf_check_row(void) {
 
 
 void test_conf_parse_row(void) {
-	service* srv = conf_parse_row("a:b:c");
+	service_t* srv = conf_parse_row("a:b:c");
 
 	CU_ASSERT_PTR_NOT_NULL_FATAL(srv);
 	CU_ASSERT_STRING_EQUAL(srv->serv, "a");
@@ -65,12 +65,12 @@ void test_conf_parse_file(void) {
 	fclose(fp);
 
 	/* Tests parsed configuration */
-	service_list* list = conf_parse_file(path);
+	service_list_t* list = conf_parse_file(path);
 
 	CU_ASSERT_PTR_NOT_NULL_FATAL(list);
 	CU_ASSERT_EQUAL(list->count, 4);
 
-	service* srv = service_list_lookup(list, "SRV12");
+	service_t* srv = service_list_lookup(list, "SRV12");
 	CU_ASSERT_PTR_NOT_NULL_FATAL(srv);
 	CU_ASSERT_STRING_EQUAL(srv->warn, "1");
 	CU_ASSERT_STRING_EQUAL(srv->crit, "2");

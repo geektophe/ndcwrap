@@ -34,18 +34,18 @@ int conf_check_row(const char* row) {
 }
 
 
-service* conf_parse_row(const char* row) {
+service_t* conf_parse_row(const char* row) {
 
 	if (! conf_check_row(row))
 		return NULL;
 
-	service* srv = service_new();
+	service_t* srv = service_new();
 
 	if (NULL == srv) {
 		PERROR();
 	}
 
-	string_words* parsed = string_split(row, CONF_DELIM);
+	string_words_t* parsed = string_split(row, CONF_DELIM);
 
 	if (NULL == parsed) {
 		PERROR();
@@ -57,7 +57,7 @@ service* conf_parse_row(const char* row) {
 }
 
 
-service_list* conf_parse_file(const char* path) {
+service_list_t* conf_parse_file(const char* path) {
 
 	char row[CONF_ROW_MAXLEN];
 	FILE* fp = fopen(path, "r");
@@ -67,7 +67,7 @@ service_list* conf_parse_file(const char* path) {
 		return NULL;
 	}
 
-	service_list* config = service_list_new();
+	service_list_t* config = service_list_new();
 
 	if (NULL == config) {
 		PERROR()
@@ -80,7 +80,6 @@ service_list* conf_parse_file(const char* path) {
 		int i=0;
 
 		for (i=strlen(row)-1; i>=0; i--) {
-			char pos = row[i];
 			if ('\n' == row[i] || '\r' == row[i]) {
 				 row[i] = '\0';
 			} else {
@@ -88,7 +87,7 @@ service_list* conf_parse_file(const char* path) {
 			}
 		}
 		/* Parses row */
-		service* srv = conf_parse_row(row);
+		service_t* srv = conf_parse_row(row);
 
 		if (NULL == srv) {
 			fprintf(stderr, "igrored invalid row on line %d\n",

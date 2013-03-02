@@ -6,7 +6,7 @@
 
 
 void test_service_new(void) {
-	service* srv = service_new();
+	service_t* srv = service_new();
 
 	CU_ASSERT_PTR_NOT_NULL_FATAL(srv);
 	CU_ASSERT_PTR_NULL(srv->serv);
@@ -23,7 +23,7 @@ void test_service_set(void) {
 	char* warn = "warn";
 	char* crit = "crit";
 
-	service* srv = service_new();
+	service_t* srv = service_new();
 
 	CU_ASSERT_PTR_NOT_NULL_FATAL(srv);
 
@@ -38,7 +38,7 @@ void test_service_set(void) {
 
 
 void test_service_list_new(void) {
-	service_list* list = service_list_new();
+	service_list_t* list = service_list_new();
 
 	CU_ASSERT_PTR_NOT_NULL_FATAL(list);
 	CU_ASSERT_PTR_NULL(list->first);
@@ -58,16 +58,16 @@ void test_service_list_append(void) {
 	char* warn2 = "warn2";
 	char* crit2 = "crit2";
 
-	service* srv1 = service_new();
+	service_t* srv1 = service_new();
 	CU_ASSERT_PTR_NOT_NULL_FATAL(srv1);
 	service_set(srv1, name1, warn1, crit1);
 
 
-	service* srv2 = service_new();
+	service_t* srv2 = service_new();
 	CU_ASSERT_PTR_NOT_NULL_FATAL(srv2);
 	service_set(srv2, name2, warn2, crit2);
 
-	service_list* list = service_list_new();
+	service_list_t* list = service_list_new();
 	CU_ASSERT_PTR_NOT_NULL_FATAL(list);
 
 	service_list_append(list, srv1);
@@ -98,16 +98,16 @@ void test_service_list_lookup(void) {
 	char* warn2 = "warn2";
 	char* crit2 = "crit2";
 
-	service* srv1 = service_new();
+	service_t* srv1 = service_new();
 	service_set(srv1, name1, warn1, crit1);
-	service* srv2 = service_new();
+	service_t* srv2 = service_new();
 	service_set(srv2, name2, warn2, crit2);
 
-	service_list* list = service_list_new();
+	service_list_t* list = service_list_new();
 	service_list_append(list, srv1);
 	service_list_append(list, srv2);
 
-	service* search = service_list_lookup(list, "name1");
+	service_t* search = service_list_lookup(list, "name1");
 	CU_ASSERT_PTR_EQUAL(search, srv1);
 
 	search = service_list_lookup(list, "name2");

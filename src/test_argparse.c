@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "CUnit/Basic.h"
 #include "argparse.h"
@@ -17,7 +18,7 @@ void test_argparse_is_dynamic(void) {
 
 void test_argparse_parse_arg(void) {
 	char test_arg[33] = "";
-	arg* parsed = NULL;
+	arg_t* parsed = NULL;
 
 	/* Wrong criticity level */
 	snprintf(test_arg, 32, "%s:SRV:NONE:1", ARGPARSE_PREFIX);
@@ -56,4 +57,70 @@ void test_argparse_parse_arg(void) {
 	CU_ASSERT_STRING_EQUAL(parsed->deflt, "-1");
 
 	arg_free(parsed);
+}
+
+void test_argparse_get_thr(void) {
+	char* name1 = "name1";
+	char* warn1 = "warn1";
+	char* crit1 = "crit1";
+
+	char* name2 = "name2";
+	char* warn2 = "warn2";
+	char* crit2 = "crit2";
+
+	service_t* srv1 = service_new();
+	CU_ASSERT_PTR_NOT_NULL_FATAL(srv1);
+	service_set(srv1, name1, warn1, crit1);
+
+	service_t* srv2 = service_new();
+	CU_ASSERT_PTR_NOT_NULL_FATAL(srv2);
+	service_set(srv2, name2, warn2, crit2);
+
+	service_list_t* list = service_list_new();
+	CU_ASSERT_PTR_NOT_NULL_FATAL(list);
+
+	service_list_append(list, srv1);
+	service_list_append(list, srv2);
+
+	char test_arg[33] = "";
+	char* thr = NULL;
+
+	// snprintf(test_arg, 32, "%s:SRV1:WARN:1", ARGPARSE_PREFIX);
+
+	snprintf(test_arg, 32, "1");
+	thr = argparse_get_thr(list, test_arg);
+	CU_ASSERT_STRING_EQUAL(thr, "1");
+	free(thr);
+
+	snprintf(test_arg, 32, "%s:name1:WARN:2", ARGPARSE_PREFIX);
+	thr = argparse_get_thr(list, test_arg);
+	CU_ASSERT_STRING_EQUAL(thr, "warn1");
+	free(thr);
+
+	snprintf(test_arg, 32, "%s:name1:CRIT:3", ARGPARSE_PREFIX);
+	thr = argparse_get_thr(list, test_arg);
+	CU_ASSERT_STRING_EQUAL(thr, "crit1");
+	free(thr);
+
+	snprintf(test_arg, 32, "%s:name2:WARN:2", ARGPARSE_PREFIX);
+	thr = argparse_get_thr(list, test_arg);
+	CU_ASSERT_STRING_EQUAL(thr, "warn2");
+	free(thr);
+
+	snprintf(test_arg, 32, "%s:name2:CRIT:3", ARGPARSE_PREFIX);
+	thr = argparse_get_thr(list, test_arg);
+	CU_ASSERT_STRING_EQUAL(thr, "crit2");
+	free(thr);
+
+	// Missing default value
+	snprintf(test_arg, 32, "%s:name1:WARN", ARGPARSE_PREFIX);
+	thr = argparse_get_thr(list, test_arg);
+	CU_ASSERT_PTR_NULL(thr);
+	free(thr);
+
+	// Undefined service
+	snprintf(test_arg, 32, "%s:noname:WARN:6", ARGPARSE_PREFIX);
+	thr = argparse_get_thr(list, test_arg);
+	CU_ASSERT_STRING_EQUAL(thr, "6");
+	free(thr);
 }

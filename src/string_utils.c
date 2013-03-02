@@ -5,8 +5,8 @@
 #include "string_utils.h"
 
 
-string_words* string_words_new(void) {
-	string_words* new_string_words = (string_words*)malloc(sizeof(string_words));
+string_words_t* string_words_new(void) {
+	string_words_t* new_string_words = (string_words_t*)malloc(sizeof(string_words_t));
 
 	if (NULL == new_string_words) {
 		PERROR();
@@ -17,7 +17,7 @@ string_words* string_words_new(void) {
 }
 
 
-void string_words_free(string_words* target) {
+void string_words_free(string_words_t* target) {
 	if (NULL == target)
 		return;
 
@@ -42,7 +42,7 @@ void string_words_free(string_words* target) {
 }
 
 
-void string_words_append(string_words* target, const char* word) {
+void string_words_append(string_words_t* target, const char* word) {
 
 	if (NULL == target) {
 		ERROR("target is not initialized.", 1);
@@ -67,8 +67,8 @@ void string_words_append(string_words* target, const char* word) {
 }
 
 
-string_words* string_split(const char* str, const char* delim) {
-	string_words* words = string_words_new();
+string_words_t* string_split(const char* str, const char* delim) {
+	string_words_t* words = string_words_new();
 
 	if (NULL == words) {
 		PERROR();

@@ -5,8 +5,8 @@
 #include "arg.h"
 #include "error.h"
 
-arg* arg_new(void) {
-	arg* new_arg = (arg*)malloc(sizeof(arg));
+arg_t* arg_new(void) {
+	arg_t* new_arg = (arg_t*)malloc(sizeof(arg_t));
 
 	if (NULL == new_arg) {
 		PERROR();
@@ -18,7 +18,7 @@ arg* arg_new(void) {
 }
 
 
-void arg_set(arg* target, const char* serv, criticity level,
+void arg_set(arg_t* target, const char* serv, criticity_t level,
               const char* deflt) {
 
 	if (NULL == target) {
@@ -58,7 +58,7 @@ void arg_set(arg* target, const char* serv, criticity level,
 }
 
 
-void arg_free(arg* target) {
+void arg_free(arg_t* target) {
 	if (NULL == target)
 		return;
 

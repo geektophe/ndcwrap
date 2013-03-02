@@ -4,6 +4,7 @@
 #include "argparse.h"
 #include "arg.h"
 #include "error.h"
+#include "service.h"
 #include "string_utils.h"
 
 
@@ -24,23 +25,23 @@ int argparse_is_dynamic(const char* strarg) {
 }
 
 
-arg* argparse_parse_arg(const char* strarg) {
+arg_t* argparse_parse_arg(const char* strarg) {
 	// Row format should be DYN:NAME:WARN:DEFAULT
 	// Counts the number of words using ":" as separator
-	string_words* parsed = string_split(strarg, ARGPARSE_DELIM);
+	string_words_t* parsed = string_split(strarg, ARGPARSE_DELIM);
 
 	if (NULL == parsed) {
 		PERROR();
 	}
 
 	char **words = parsed->words;
-	arg* parsed_arg = NULL;
+	arg_t* parsed_arg = NULL;
 
 	if ( 4 == parsed->count &&
 	    (0 == strncmp(words[2],"WARN",4) || 0 == strncmp(words[2],"CRIT",4))
 	    ) {
 		parsed_arg = arg_new();
-		criticity level = LEVEL_NULL;
+		criticity_t level = LEVEL_NULL;
 
 		if (0 == strncmp(words[2],"WARN",4)) {
 			level = LEVEL_WARN;
@@ -52,4 +53,41 @@ arg* argparse_parse_arg(const char* strarg) {
 
 	string_words_free(parsed);
 	return parsed_arg;
+}
+
+
+char* argparse_get_thr(service_list_t* services, const char* strarg) {
+	char * res = NULL;
+
+	if (!argparse_is_dynamic(strarg)) {
+		res = strdup(strarg);
+
+		if (NULL == res) {
+			return NULL;
+		}
+		return res;
+	}
+
+	arg_t* parsed = argparse_parse_arg(strarg);
+
+	if (NULL == parsed) {
+		return NULL;
+	}
+
+	service_t* srv = service_list_lookup(services, parsed->serv);
+
+	if (NULL == srv) {
+		res = strdup(parsed->deflt);
+	} else {
+		if (LEVEL_WARN == parsed->level) {
+			res = strdup(srv->warn);
+		} else {
+			res = strdup(srv->crit);
+		}
+	}
+	if (NULL == res) {
+		PERROR();
+	}
+	arg_free(parsed);
+	return res;
 }

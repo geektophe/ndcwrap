@@ -6,7 +6,7 @@
 
 
 void test_arg_new(void) {
-	arg* a = arg_new();
+	arg_t* a = arg_new();
 
 	CU_ASSERT_PTR_NOT_NULL_FATAL(a);
 	CU_ASSERT_PTR_NULL(a->serv);
@@ -19,10 +19,10 @@ void test_arg_new(void) {
 
 void test_arg_set(void) {
 	char* serv = "SRV";
-	criticity level = LEVEL_WARN;
+	criticity_t level = LEVEL_WARN;
 	char* deflt = "1";
 
-	arg* a = arg_new();
+	arg_t* a = arg_new();
 	arg_set(a, serv, level, deflt);
 
 	CU_ASSERT_PTR_NOT_NULL_FATAL(a);

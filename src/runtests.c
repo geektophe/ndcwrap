@@ -91,7 +91,8 @@ int main(void) {
 	}
 
 	if (NULL == CU_add_test(tsuite, "test of argparse_is_dynamic()", test_argparse_is_dynamic) ||
-	    NULL == CU_add_test(tsuite, "test of argparse_parse_arg()", test_argparse_parse_arg)
+	    NULL == CU_add_test(tsuite, "test of argparse_parse_arg()", test_argparse_parse_arg) ||
+	    NULL == CU_add_test(tsuite, "test of argparse_get_thr()", test_argparse_get_thr)
 	    ) {
 		CU_cleanup_registry();
 		return CU_get_error();
