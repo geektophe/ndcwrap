@@ -1,12 +1,46 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
+#include <unistd.h>
 #include "CUnit/Basic.h"
 #include "conf.h"
 #include "test_conf.h"
 
-#define CONF_TEST_PATH "build/sample.conf"
-#define CONF_TEST_FILE "SRV12:1:2\nSRV34:3:4\nSRV56:5:6\nSRV78:a:-1"
+#define CONF_TEST_ENVVAR "TEST_CONF_PATH"
+#define CONF_TEST_PATH   "build/sample.conf"
+#define CONF_TEST_PATH2  "build/sample2.conf"
+#define CONF_TEST_FILE   "SRV12:1:2\nSRV34:3:4\nSRV56:5:6\nSRV78:a:-1"
+
+
+void test_conf_get_path(void) {
+	char* path;
+	path = conf_get_path("", NULL);
+	CU_ASSERT_PTR_NULL(path);
+
+	unlink(CONF_TEST_PATH);
+	FILE* fp = fopen(CONF_TEST_PATH, "w");
+	CU_ASSERT_PTR_NOT_NULL_FATAL(fp);
+	fclose(fp);
+
+	path = conf_get_path(CONF_TEST_PATH, NULL);
+	CU_ASSERT_STRING_EQUAL(CONF_TEST_PATH, path);
+
+	unsetenv(CONF_TEST_ENVVAR);
+	path = conf_get_path(CONF_TEST_PATH, CONF_TEST_ENVVAR);
+	CU_ASSERT_STRING_EQUAL(CONF_TEST_PATH, path);
+
+	setenv(CONF_TEST_ENVVAR, CONF_TEST_PATH2, 1);
+	unlink(CONF_TEST_PATH2);
+	path = conf_get_path(CONF_TEST_PATH2, CONF_TEST_ENVVAR);
+	CU_ASSERT_PTR_NULL(path);
+
+	fp = fopen(CONF_TEST_PATH2, "w");
+	CU_ASSERT_PTR_NOT_NULL_FATAL(fp);
+	fclose(fp);
+
+	path = conf_get_path(CONF_TEST_PATH, CONF_TEST_ENVVAR);
+	CU_ASSERT_STRING_EQUAL(CONF_TEST_PATH2, path);
+}
 
 
 void test_conf_check_row(void) {

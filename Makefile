@@ -5,19 +5,21 @@ CFLAGS=-g -W -Wall
 
 SRC = src
 BUILD = build
-EXEC = $(BUILD)/cliw
+EXEC = $(BUILD)/dcliwrap
 TEST = $(BUILD)/runtests
 
-_OBJS = string_utils.o \
+_OBJS = \
+	string_utils.o \
 	service.o \
-	cliw.o \
 	conf.o \
 	arg.o \
-	argparse.o
+	argparse.o \
+	main.o
 
-OBJS  = $(patsubst %,$(BUILD)/%,$(_OBJS))
+OBJS = $(patsubst %,$(BUILD)/%,$(_OBJS))
 
-_TSTS = string_utils.o \
+_TSTS = \
+	string_utils.o \
 	service.o \
 	conf.o \
 	arg.o \
@@ -29,16 +31,16 @@ _TSTS = string_utils.o \
 	test_argparse.o \
 	runtests.o
 
-TSTS  = $(patsubst %,$(BUILD)/%,$(_TSTS))
-
-$(BUILD)/%.o: $(SRC)/%.c $(SRC)/%.h $(SRC)/error.h
-	$(CC) -o $@ -c $< $(CFLAGS)
+TSTS = $(patsubst %,$(BUILD)/%,$(_TSTS))
 
 $(EXEC): $(OBJS)
 	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
 $(TEST): $(TSTS)
 	$(CC) -lcunit -o $(TEST) $^ $(LDFLAGS)
+
+$(BUILD)/%.o: $(SRC)/%.c $(SRC)/%.h $(SRC)/error.h
+	$(CC) -o $@ -c $< $(CFLAGS)
 
 test: $(TEST)
 	build/runtests

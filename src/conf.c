@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "error.h"
 #include "conf.h"
 #include "service.h"
@@ -8,6 +9,25 @@
 
 #define CONF_ROW_MAXLEN 81
 #define CONF_DELIM ":"
+
+
+char* conf_get_path(char* deflt_path, char* env_name) {
+	char* path = NULL;
+
+	if (NULL != env_name) {
+		path = getenv(env_name);
+	} else {
+		path = deflt_path;
+	}
+	if (NULL == path) {
+		return NULL;
+	}
+	if (0 == access(path, R_OK)) {
+		return path;
+	} else {
+		return NULL;
+	}
+}
 
 
 int conf_check_row(const char* row) {
