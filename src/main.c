@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <libgen.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include "main.h"
 #include "conf.h"
 #include "argparse.h"
@@ -15,7 +18,7 @@ int main(int argc, char **argv) {
 		error(errmsg, ECRITICAL);
 	}
 
-	char* path = conf_get_path(DCLIWRAP_CONFIG, DCLIWRAP_ENVVAR);
+	char* path = conf_get_path(DCLIWRAP_CONFIG, DCLIWRAP_CONFIG_ENVVAR);
 
 	if (NULL == path) {
 		error("CRITICAL: Could not read configuration file.", ECRITICAL);
@@ -36,12 +39,20 @@ int main(int argc, char **argv) {
 	}
 	service_list_free(conf);
 
-	unsigned int j;
-	for (j=0; j<dest->count; j++) {
-		printf("%s ", dest->words[j]);
+	if (is_debug()) {
+		printf("DEBUG: ");
+
+		unsigned int j;
+
+		for (j=0; j<dest->count; j++) {
+			printf("%s ", dest->words[j]);
+		}
+		printf("\n");
+		string_words_free(dest);
+	} else {
+		string_words_insert(dest, dest->words[0], 0);
+		execvp(dest->words[0], dest->words);
 	}
-	printf("\n");
-	string_words_free(dest);
 	return 0;
 }
 
@@ -49,4 +60,15 @@ int main(int argc, char **argv) {
 void error(char* errmsg, int code) {
 	fprintf(stderr, "%s\n", errmsg);
 	exit(code);
+}
+
+
+int is_debug(void) {
+	char* debug = getenv(DCLIWRAP_DEBUG_ENVVAR);
+
+	if (NULL == debug || strncmp(debug, "1", 1)) {
+		return 0;
+	} else {
+		return 1;
+	}
 }

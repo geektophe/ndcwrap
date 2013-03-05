@@ -49,9 +49,9 @@ void string_words_append(string_words_t* target, const char* word) {
 	}
 
 	if (target->words == NULL) {
-		target->words = (char**)malloc(sizeof(char*));
+		target->words = (char**)malloc(sizeof(char*) * 2);
 	} else {
-		target->words = (char**)realloc(target->words, sizeof(char*) * (target->count + 1));
+		target->words = (char**)realloc(target->words, sizeof(char*) * (target->count + 2));
 	}
 
 	if (NULL == target->words) {
@@ -59,11 +59,46 @@ void string_words_append(string_words_t* target, const char* word) {
 	}
 
 	target->words[target->count] = strdup(word);
+	target->words[target->count+1] = NULL;
 
 	if (NULL == target->words[target->count]) {
 		PERROR();
 	}
 	target->count++;
+}
+
+int string_words_insert(string_words_t* target, const char* word, unsigned int pos) {
+
+	if (NULL == target) {
+		ERROR("target is not initialized.", 1);
+	}
+
+	if (pos > target->count) {
+		return -1;
+	}
+
+	if (target->words == NULL) {
+		target->words = (char**)malloc(sizeof(char*) * 2);
+	} else {
+		target->words = (char**)realloc(target->words, sizeof(char*) * (target->count + 2));
+	}
+
+	if (NULL == target->words) {
+		PERROR();
+	}
+
+	unsigned int i;
+	for (i=target->count; i>pos; i--) {
+		target->words[i] = target->words[i-1];
+	}
+
+	target->words[pos] = strdup(word);
+
+	if (NULL == target->words[pos]) {
+		PERROR();
+	}
+	target->count++;
+	return pos;
 }
 
 

@@ -42,8 +42,13 @@ $(TEST): $(TSTS)
 $(BUILD)/%.o: $(SRC)/%.c $(SRC)/%.h $(SRC)/error.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
-test: $(TEST)
-	build/runtests
+test: $(TEST) $(EXEC)
+	$(TEST)
+	DCLIWRAP_CONFIG=test/sample.conf DCLIWRAP_DEBUG=1 $(EXEC) a b DYN:SRV12:WARN:5|grep "a b 1"
+	DCLIWRAP_CONFIG=test/sample.conf DCLIWRAP_DEBUG=1 $(EXEC) a b DYN:SRV12:CRIT:5|grep "a b 2"
+	DCLIWRAP_CONFIG=test/sample.conf DCLIWRAP_DEBUG=1 $(EXEC) a b DYN:SRV13:CRIT:5|grep "a b 5"
+	DCLIWRAP_CONFIG=test/sample.conf $(EXEC) test/printarg a b DYN:SRV12:CRIT:5|grep "a b 2"
+	echo "All tests successfully passed."
 
 .PHONY: clean
 

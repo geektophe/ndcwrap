@@ -35,6 +35,7 @@ int main(void) {
 
 	if (NULL == CU_add_test(tsuite, "test of strirg_new()", test_string_new) ||
 	    NULL == CU_add_test(tsuite, "test of strirg_append()", test_string_append) ||
+	    NULL == CU_add_test(tsuite, "test of strirg_insert()", test_string_insert) ||
 	    NULL == CU_add_test(tsuite, "test of strirg_split()", test_string_split)
 	    ) {
 		CU_cleanup_registry();

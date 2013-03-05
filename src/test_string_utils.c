@@ -25,6 +25,34 @@ void test_string_append(void) {
 	CU_ASSERT_STRING_EQUAL(words->words[0], "a");
 	CU_ASSERT_STRING_EQUAL(words->words[1], "b");
 	CU_ASSERT_STRING_EQUAL(words->words[2], "c");
+	CU_ASSERT_PTR_NULL(words->words[3]);
+}
+
+
+void test_string_insert(void) {
+	string_words_t* words = string_words_new();
+
+	CU_ASSERT_PTR_NOT_NULL_FATAL(words);
+
+	int i;
+	string_words_append(words, "a");
+	string_words_append(words, "b");
+	string_words_append(words, "c");
+
+	i = string_words_insert(words, "1", 0);
+	CU_ASSERT_EQUAL(i, 0);
+	i = string_words_insert(words, "2", 2);
+	CU_ASSERT_EQUAL(i, 2);
+	i = string_words_insert(words, "3", 10);
+	CU_ASSERT_EQUAL(i, -1);
+
+	CU_ASSERT_EQUAL(words->count, 5);
+	CU_ASSERT_STRING_EQUAL(words->words[0], "1");
+	CU_ASSERT_STRING_EQUAL(words->words[1], "a");
+	CU_ASSERT_STRING_EQUAL(words->words[2], "2");
+	CU_ASSERT_STRING_EQUAL(words->words[3], "b");
+	CU_ASSERT_STRING_EQUAL(words->words[4], "c");
+	CU_ASSERT_PTR_NULL(words->words[5]);
 }
 
 
