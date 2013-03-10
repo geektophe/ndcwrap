@@ -11,6 +11,21 @@
 #define CONF_DELIM ":"
 
 
+/**
+ * Returns a configuration file path. The default path ginev in fist parameter
+ * may be overriden if sipecified in the environmanet variable wihch name is
+ * given in second parameter.
+ *
+ * If path given in any of default path or in the environment variable does not
+ * exist, the returned value is NULL.
+ *
+ * Caution, returned string has to be freed using free function.
+ *
+ * @param[in] deflt_path	The default configuration file ptah.
+ * @param[in] env_name		Name of environment varible which may
+ * 				override default path.
+ * @return char*
+ */
 char* conf_get_path(char* deflt_path, char* env_name) {
 	char* path = NULL;
 
@@ -30,6 +45,16 @@ char* conf_get_path(char* deflt_path, char* env_name) {
 }
 
 
+/**
+ * Checks if a configuration file row format is valid.
+ *
+ * Rows should match the format above.
+ *
+ *	NAME:WARN VAL:CRIT VAL
+ *
+ * @param[in] row	The command row to check.
+ * @return int
+ */
 int conf_check_row(const char* row) {
 	// Row format should be NAME:WARN:CRIT
 	// Counts the number of words using ":" as separator
@@ -54,6 +79,19 @@ int conf_check_row(const char* row) {
 }
 
 
+/**
+ * Parses a config file row into a service_t structure and returns a pointer to
+ * the initialized structure.
+ *
+ * Rows should match the format above.
+ *
+ *	NAME:WARN VAL:CRIT VAL
+ *
+ * Caution, returned pointer has to be freed using service_free function.
+ *
+ * @param[in] row	The command row to parse.
+ * @return service_t*
+ */
 service_t* conf_parse_row(const char* row) {
 
 	if (! conf_check_row(row))
@@ -77,6 +115,15 @@ service_t* conf_parse_row(const char* row) {
 }
 
 
+/**
+ * Parses a whole config file into a service_list_t structure and returns a
+ * pointer to the structrue filled with service_t structures.
+ *
+ * Caution, returned pointer has to be freed using service_list_free function.
+ *
+ * @param[in] path		The configuration file to parse.
+ * @return service_list_t*
+ */
 service_list_t* conf_parse_file(const char* path) {
 
 	char row[CONF_ROW_MAXLEN];

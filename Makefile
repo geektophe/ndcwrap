@@ -5,7 +5,7 @@ CFLAGS=-g -W -Wall
 
 SRC = src
 BUILD = build
-EXEC = $(BUILD)/dcliwrap
+EXEC = $(BUILD)/ndcwrap
 TEST = $(BUILD)/runtests
 
 _OBJS = \

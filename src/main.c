@@ -11,6 +11,13 @@
 #include "string_utils.h"
 
 
+/**
+ * Main function
+ *
+ * @paran [in] argc	The cammand line parameters count.
+ * @param [in] argv	A string array containing command line parameters.
+ * @return int
+ */
 int main(int argc, char **argv) {
 	if (argc < 3) {
 		char errmsg[128];
@@ -56,13 +63,24 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
-
+/**
+ * Displayes an error message and exits.
+ *
+ * @paran [in] errmsg	The error message to display.
+ * @param [in] code	The return code.
+ * @return void
+ */
 void error(char* errmsg, int code) {
 	fprintf(stderr, "%s\n", errmsg);
 	exit(code);
 }
 
 
+/**
+ * Tests if the debug environmont variable is set.
+ *
+ * @return int
+ */
 int is_debug(void) {
 	char* debug = getenv(DCLIWRAP_DEBUG_ENVVAR);
 

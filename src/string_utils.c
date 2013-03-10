@@ -5,8 +5,16 @@
 #include "string_utils.h"
 
 
+/*
+ * Returns a pointer to a new string_words_t structure.
+ *
+ * Caution, returned poirnter has to be freed using string_words_free function.
+ *
+ * @return string_words_t*
+ */
 string_words_t* string_words_new(void) {
-	string_words_t* new_string_words = (string_words_t*)malloc(sizeof(string_words_t));
+	string_words_t* new_string_words =
+		(string_words_t*)malloc(sizeof(string_words_t));
 
 	if (NULL == new_string_words) {
 		PERROR();
@@ -17,6 +25,12 @@ string_words_t* string_words_new(void) {
 }
 
 
+/**
+ * Frees a string_words_t structure pointer.
+ *
+ * @param[in] target	The string_words_t structure pointer to free.
+ * @return void
+ */
 void string_words_free(string_words_t* target) {
 	if (NULL == target)
 		return;
@@ -42,6 +56,15 @@ void string_words_free(string_words_t* target) {
 }
 
 
+/**
+ * Appends a new word at the end of the string_words_t pointed by target.
+ *
+ * Note that the words attribute is always NULL terminated.
+ *
+ * @param[in] target	The string_words_t structure pointer to append word.
+ * @param[in] word	The word to append.
+ * @return void
+ */
 void string_words_append(string_words_t* target, const char* word) {
 
 	if (NULL == target) {
@@ -51,7 +74,8 @@ void string_words_append(string_words_t* target, const char* word) {
 	if (target->words == NULL) {
 		target->words = (char**)malloc(sizeof(char*) * 2);
 	} else {
-		target->words = (char**)realloc(target->words, sizeof(char*) * (target->count + 2));
+		target->words = (char**)realloc(target->words, sizeof(char*) *
+				(target->count + 2));
 	}
 
 	if (NULL == target->words) {
@@ -67,6 +91,18 @@ void string_words_append(string_words_t* target, const char* word) {
 	target->count++;
 }
 
+
+/**
+ * Inserts a new word in of the string_words_t pointed by target at a given
+ * position.
+ *
+ * Note that the words attribute is always NULL terminated.
+ *
+ * @param[in] target	The string_words_t structure pointer to insert word.
+ * @param[in] word	The word to insert.
+ * @param[in] pos	The position to inserv word in words attribute array.
+ * @return void
+ */
 int string_words_insert(string_words_t* target, const char* word, unsigned int pos) {
 
 	if (NULL == target) {
@@ -77,7 +113,7 @@ int string_words_insert(string_words_t* target, const char* word, unsigned int p
 		return -1;
 	}
 
-	if (target->words == NULL) {
+	if (NULL == target->words) {
 		target->words = (char**)malloc(sizeof(char*) * 2);
 	} else {
 		target->words = (char**)realloc(target->words, sizeof(char*) * (target->count + 2));
@@ -102,6 +138,17 @@ int string_words_insert(string_words_t* target, const char* word, unsigned int p
 }
 
 
+/**
+ * Splits a string into words using a specified delimiter.
+ *
+ * Caution, returned poirnter has to be freed using string_words_free function.
+ *
+ * Note that the words attribute is always NULL terminated.
+ *
+ * @param[in] str	The string to stplit.
+ * @param[in] delim	The delimiter used to split string (uses strtok).
+ * @return void
+ */
 string_words_t* string_split(const char* str, const char* delim) {
 	string_words_t* words = string_words_new();
 

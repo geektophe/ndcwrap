@@ -8,6 +8,18 @@
 #include "string_utils.h"
 
 
+/**
+ * Checks if a command line parameter is a parsable dynamic argument.
+ *
+ * Dynamic argument format is described below.
+ *
+ * 	PREFIX:SERVICE:CRITICITY:DEFAULT
+ *
+ * The function checks if the argumert is prefixed by ARGPARSE_PREFIX.
+ *
+ * @param const char*	The command line argumert to check.
+ * @return int
+ */
 int argparse_is_dynamic(const char* strarg) {
 	size_t sz = strlen(ARGPARSE_PREFIX) + strlen(ARGPARSE_DELIM);
 	int res = 0;
@@ -25,6 +37,15 @@ int argparse_is_dynamic(const char* strarg) {
 }
 
 
+/**
+ * Parses a dynamic command line parameter, and return an arg_t pointer to the
+ * corresponding arg_t sructure.
+ *
+ * Caution, returned pointer has to be freed using arg_free function.
+ *
+ * @param[in] strarg	The command line argumert to parse.
+ * @return arg_t*
+ */
 arg_t* argparse_parse_arg(const char* strarg) {
 	// Row format should be DYN:NAME:WARN:DEFAULT
 	// Counts the number of words using ":" as separator
@@ -56,6 +77,20 @@ arg_t* argparse_parse_arg(const char* strarg) {
 }
 
 
+/**
+ * Parses a dynamic command line parameter, and tries to find out corresponding
+ * threshold in a set of services definition, in firstp parameter.
+ *
+ * If the serîce is found, the correponding criticity level threshold is
+ * returned. If not so, the default value is returned.
+ *
+ * Caution, the string returned by this function has to be fneed using free
+ * function.
+ *
+ * @param[in] services	The service list to look for service name.
+ * @param[in] strarg	The command line parameter to parse.
+ * @return char*
+ */
 char* argparse_get_thr(service_list_t* services, const char* strarg) {
 	char * res = NULL;
 

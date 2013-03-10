@@ -5,6 +5,14 @@
 #include "arg.h"
 #include "error.h"
 
+
+/**
+ * Returns a pointer to a new arg_t structure.
+ *
+ * Caution, returned poirnter has to be freed using arg_free function.
+ *
+ * @return arg_t*
+ */
 arg_t* arg_new(void) {
 	arg_t* new_arg = (arg_t*)malloc(sizeof(arg_t));
 
@@ -18,6 +26,17 @@ arg_t* arg_new(void) {
 }
 
 
+/**
+ * Sets an arg_t structure attributes.
+ *
+ * Argument positions which passed value is NULL are ignored.
+ *
+ * @param[in] target	The target arg_t pointer to set attributes value
+ * @param[in] serv		The service name to set as serv attrubute
+ * @param[in] level		The criticity level to as level attrubute
+ * @param[in] deflt		The value to set as deflt attrubute
+ * @return void
+ */
 void arg_set(arg_t* target, const char* serv, criticity_t level,
               const char* deflt) {
 
@@ -58,6 +77,12 @@ void arg_set(arg_t* target, const char* serv, criticity_t level,
 }
 
 
+/**
+ * Frees an ang_t pointer structure.
+ *
+ * @param[in] target	The arg_t structure pointer to free.
+ * @return void
+ */
 void arg_free(arg_t* target) {
 	if (NULL == target)
 		return;
