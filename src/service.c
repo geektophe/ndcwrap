@@ -41,12 +41,11 @@ void service_set(service_t* target, const char* serv, const char* warn,
 		if (NULL != target->serv) {
 			free(target->serv);
 		}
-		target->serv = (char*)malloc(sizeof(char) * (strlen(serv) + 1));
+		target->serv = strdup(serv);
 
 		if (NULL == target->serv) {
 			PERROR();
 		}
-		strncpy(target->serv, serv, strlen(serv) + 1);
 	}
 
 	/* Sets serv warn */
@@ -54,12 +53,11 @@ void service_set(service_t* target, const char* serv, const char* warn,
 		if (NULL != target->warn) {
 			free(target->warn);
 		}
-		target->warn = (char*)malloc(sizeof(char) * (strlen(warn) + 1));
+		target->warn = strdup(warn);
 
 		if (NULL == target->warn) {
 			PERROR();
 		}
-		strncpy(target->warn, warn, strlen(warn) + 1);
 	}
 
 	/* Sets serv crit */
@@ -67,12 +65,11 @@ void service_set(service_t* target, const char* serv, const char* warn,
 		if (NULL != target->crit) {
 			free(target->crit);
 		}
-		target->crit = (char*)malloc(sizeof(char) * (strlen(crit) + 1));
+		target->crit = strdup(crit);
 
 		if (NULL == target->crit) {
 			PERROR();
 		}
-		strncpy(target->crit, crit, strlen(crit) + 1);
 	}
 }
 

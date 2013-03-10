@@ -49,12 +49,11 @@ void arg_set(arg_t* target, const char* serv, criticity_t level,
 		if (NULL != target->serv) {
 			free(target->serv);
 		}
-		target->serv = (char*)malloc(sizeof(char) * (strlen(serv) + 1));
+		target->serv = strdup(serv);
 
 		if (NULL == target->serv) {
 			PERROR();
 		}
-		strncpy(target->serv, serv, strlen(serv) + 1);
 	}
 
 	/* Sets serv warn */
@@ -67,12 +66,11 @@ void arg_set(arg_t* target, const char* serv, criticity_t level,
 		if (NULL != target->deflt) {
 			free(target->deflt);
 		}
-		target->deflt = (char*)malloc(sizeof(char) * (strlen(deflt) + 1));
+		target->deflt = strdup(deflt);
 
 		if (NULL == target->deflt) {
 			PERROR();
 		}
-		strncpy(target->deflt, deflt, strlen(deflt) + 1);
 	}
 }
 
